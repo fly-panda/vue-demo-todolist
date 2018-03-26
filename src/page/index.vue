@@ -6,16 +6,26 @@
     </div>
     <ul class="list">
       <li v-for="(item,index) in items" v-bind:class="{finishBackground:item.isFinish}">
+
         <span class="badge" v-on:click="toogleFinsih(item,index)">
           <span v-if="item.isFinish">√</span>
         </span>
+
         <span class="number" v-text="index+1+'.'"></span>
-        <router-link :to="{name: 'Detail',params: {id:index,text:item.text}}">
+
+        <router-link v-if="item.isFinish == false" :to="{name: 'Detail',params: {id:index,text:item.text}}">
           <span v-bind:class="{finishText:item.isFinish}">{{item.text}}</span>
         </router-link>
-        <span class="del" v-on:click="delItem(index)">X</span>
+
+        <a v-else href="javascript:;">
+          <span v-bind:class="{finishText:item.isFinish}">{{item.text}}</span>
+        </a>
+
+        <span class="del" v-on:click="delItem(item, index)">X</span>
+
       </li>
     </ul>
+
     <router-view></router-view>
   </div>
 </template>
@@ -70,7 +80,8 @@
           self.newItem = '';
         }
       },
-       toogleFinsih: function (item,index) {
+      toogleFinsih: function (item, index) {
+          console.log(lsp.get())
           this.items[index].isFinish = !item.isFinish
           lsp.add(this.items)
       },
